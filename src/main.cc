@@ -4,7 +4,6 @@
 #include <numeric>
 #include <vector>
 #include <set>
-#include <map>
 #include <htslib/vcf.h>
 #include <htslibpp.h>
 #include <htslibpp_variant.h>
@@ -14,9 +13,6 @@
 #include "supertree.h"
 
 using namespace YiCppLib::HTSLibpp;
-
-template<class T>
-class TD;
 
 int main(int argc, char** argv) {
 
@@ -34,11 +30,7 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    // what we need here
-    // sample list
-    // cluster list
-    // (sample, cluster) -> AF
-    
+    // parse vcf file for samples, clusters, and cluster allele frequencies
     std::vector<std::string> samples;
     std::set<std::string> af_clusters;
     af_table_t af_table;
@@ -46,6 +38,7 @@ int main(int argc, char** argv) {
     parse_vcf(vcf, header, samples, af_clusters, af_table);
 
 
+    // visualize sample / cluster allele frequency table
     std::sort(samples.begin(), samples.end());
 
     std::cout<<std::fixed;
@@ -65,6 +58,7 @@ int main(int argc, char** argv) {
         std::cout<<std::endl;
     }
 
+    // compute super trees
     auto trees = supertrees(samples, af_clusters, af_table);
     for(auto t : trees) {
         std::cout<<"solution:";
