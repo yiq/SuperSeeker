@@ -5,6 +5,7 @@
 
 constexpr float epsilon = 0.05;
 
+/* private function declarations */
 edge_set_t find_viable_moves(
         const std::vector<std::string>& samples,
         const std::set<std::string>& af_clusters,
@@ -19,6 +20,7 @@ void enumerate_tree(
         const std::vector<std::string>& samples,
         const af_table_t& afs);
 
+/* public function definitions */
 solution_t supertrees(
         const std::vector<std::string>& samples,
         const std::set<std::string>& af_clusters,
@@ -33,10 +35,35 @@ solution_t supertrees(
             viable_moves, samples, af_table);
 
     return solution_set;
-
-
-
 }
+
+std::map<std::string, float> supertree_trace(
+        const edge_set_t& solution,
+        const std::string& sample,
+        const std::set<std::string>& af_clusters,
+        const af_table_t& af_table) {
+
+    std::map<std::string, float> trace;
+
+    // logic:
+    //   * if a node has no children, it's trace = af in af_table
+    //   * otherwise, it's trace = af - sum(children af) in af_table
+    std::for_each(af_clusters.begin(), af_clusters.end(), [&](const auto &cluster) {
+
+            float self_af = af_table.at({sample, cluster});
+            float children_af = 0;
+
+            std::for_each(solution.begin(), solution.end(), [&](const auto& edge) {
+                    if(edge.first == cluster) children_af += af_table.at(af_key_t{sample, edge.second});
+                    });
+
+            trace[cluster] = self_af - children_af;
+
+            });
+
+    return trace;
+}
+
 
 /* private implementations */
 

@@ -64,6 +64,15 @@ int main(int argc, char** argv) {
         std::cout<<"solution:";
         for(auto edge : t) std::cout<<"\t"<<edge.first<<" -> "<<edge.second;
         std::cout<<std::endl;
+
+        // trace
+        for(auto s : samples) {
+            std::cout<<"sample trace in "<<s<<std::endl;
+            auto trace = supertree_trace(t, s, af_clusters, af_table);
+            std::cout<<"n: "<<trace["n"];
+            for(auto c : af_clusters) std::cout<<"\t"<<c<<": "<<trace[c];
+            std::cout<<std::endl;
+        }
     }
 
     return 0;

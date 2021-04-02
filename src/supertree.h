@@ -13,4 +13,9 @@ solution_t supertrees(
         const std::set<std::string>& af_clusters,
         const af_table_t& af_table);
 
+std::map<std::string, float> supertree_trace(
+        const edge_set_t& solution,
+        const std::string& sample,
+        const std::set<std::string>& af_clusters,
+        const af_table_t& af_table);
 #endif

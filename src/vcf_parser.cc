@@ -50,8 +50,10 @@ void parse_vcf(
             }
         });
 
-    for(auto cluster : af_clusters) {
-        for(auto sample : samples) {
+    for(auto sample : samples) {
+        // insert normal nodes
+        af_table[{sample, "n"}] = 0.5;
+        for(auto cluster : af_clusters) {
             auto pa = af_key_t{sample, cluster};
             auto af = std::accumulate(allele_frequencies[pa].begin(), allele_frequencies[pa].end(), 0.0) / allele_frequencies[pa].size();
             af_table[pa] = af;
