@@ -10,6 +10,7 @@
 
 #include "typedefs.h"
 #include "vcf_parser.h"
+#include "vcf_print.h"
 #include "supertree.h"
 
 using namespace YiCppLib::HTSLibpp;
@@ -37,43 +38,15 @@ int main(int argc, char** argv) {
 
     parse_vcf(vcf, header, samples, af_clusters, af_table);
 
-
-    // visualize sample / cluster allele frequency table
-    std::sort(samples.begin(), samples.end());
-
-    std::cout<<std::fixed;
-    std::cout<<std::setprecision(2);
-    
-    for(auto sample : samples) {
-        std::cout<<"\t"<<sample;
-    }
-    std::cout<<std::endl;
-
-    for(auto cluster : af_clusters) {
-        std::cout<<cluster;
-        for(auto sample : samples) {
-            auto pa = af_key_t{sample, cluster};
-            std::cout<<"\t"<<af_table[pa];
-        }
-        std::cout<<std::endl;
-    }
-
     // compute super trees
     auto trees = supertrees(samples, af_clusters, af_table);
-    for(auto t : trees) {
-        std::cout<<"solution:";
-        for(auto edge : t) std::cout<<"\t"<<edge.first<<" -> "<<edge.second;
-        std::cout<<std::endl;
-
-        // trace
-        for(auto s : samples) {
-            std::cout<<"sample trace in "<<s<<std::endl;
-            auto trace = supertree_trace(t, s, af_clusters, af_table);
-            std::cout<<"n: "<<trace["n"];
-            for(auto c : af_clusters) std::cout<<"\t"<<c<<": "<<trace[c];
-            std::cout<<std::endl;
-        }
-    }
+    
+    // reopen vcf file to produce output
+    vcf.release();
+    vcf = htsOpen(argv[1], "r");
+    header = htsHeader<bcfHeader>::read(vcf);
+   
+    vcf_print(vcf, header, trees, samples, af_clusters, af_table);
 
     return 0;
 }
