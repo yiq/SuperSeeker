@@ -1,6 +1,6 @@
 # Perlude.
 
-AC_INIT([subcloneseeker], [2.0.0], [atrusqiao@gmail.com])
+AC_INIT([superseeker], [2.0.0], [atrusqiao@gmail.com])
 AC_PREREQ([2.70])  # Let's forget about the old days
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
