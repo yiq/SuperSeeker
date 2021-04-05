@@ -42,5 +42,5 @@ AC_CHECK_LIB([hts], [bcf_read], [], [AC_MSG_ERROR([Could not find htslib shared 
 # contrib/Makefile: how to handle 3rd party projects
 AC_CONFIG_HEADERS([config.h])
 #AC_CONFIG_FILES([Makefile src/Makefile test/Makefile contrib/Makefile])
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile contrib/Makefile])
 AC_OUTPUT

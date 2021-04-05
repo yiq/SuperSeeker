@@ -1,23 +1,22 @@
 Installation
 ============
 
-SubcloneSeeker distributes in the format of source code. You can compile and
+SuperSeeker distributes in the format of source code. You can compile and
 install it on your platform with relative ease since the project is managed by
 GNU autotools. 
 
 Requirement
 -----------
 
-In order to successfully compile the project, you will need no more than a
-working c++ compiler on a Unix / Linux system. For generating the
-documentation, you will, in addition, need Doxygen installed at places where
-its binary can be found in PATH environment variable. 
+In order to successfully compile the project, you will need a working c++
+compiler with c++14 support on a Unix / Linux system. You will also need to
+compile and install the htslib library and header files
 
 Getting the source code
 -----------------------
 
-The latest release of SubcloneSeeker is 1.0, which can be downloaded at
-https://github.com/yiq/SubcloneSeeker
+The latest release of SuperSeeker is 2.0, which can be downloaded at
+https://github.com/yiq/SuperSeeker
 
 Compile
 -------
@@ -25,37 +24,16 @@ Compile
 Like any other project that is under the management of GNU autotools, you
 perform the following from the project's source tree:
 
-	./configure
+	./configure --with-htslib=<path-to-htslib-install-prefix>
 	make
 
-If you like to run the test suite, execute the following
-
-	make check
-
-These are unit tests to ensure the correctness of the source code. They would
-come in handy if you want to modify the source code
-
-Note: The project does not support VPATH build yet. It needs to be built in the
-source tree directly
+you should now have the executable `src/superseeker`. If you want to install
+the binary to your system, follow the next section 
 
 Installation
 ------------
 
-All the command-line utilities will be created in the 'utils' directory. They
-can be run directly from there, or should you choose to, be installed into your
-system (usually defaults to /usr/local/bin) with the following command
+To install the compiled `superseeker` executable (usually defaults to
+`/usr/local/bin`), issue the following command
 
 	make install
-
-This will also install the statically compiled SubcloneSeeker core library
-libss.a into /usr/local/lib
-
-Uninstall
----------
-
-Simply execute
-
-	make uninstall
-
-from the source tree to uninstall the binaries from your system
-
