@@ -2,8 +2,9 @@
 
 #include <algorithm>
 #include <numeric>
+#include <iostream>
 
-constexpr float epsilon = 0.05;
+constexpr float epsilon = 0.10;
 
 /* private function declarations */
 edge_set_t find_viable_moves(
@@ -29,6 +30,8 @@ solution_t supertrees(
     solution_t solution_set;
     solution_t candidate_set;
     auto viable_moves = find_viable_moves(samples, af_clusters, af_table);
+
+    for(auto& e : viable_moves) std::cerr<<e.first<<"->"<<e.second<<std::endl;
 
     enumerate_tree(af_clusters, edge_set_t(),
             candidate_set, solution_set,
@@ -82,6 +85,7 @@ edge_set_t find_viable_moves(
             bool feasible = std::all_of(samples.begin(), samples.end(), [&](auto sample) {
                     auto pa1 = af_key_t{sample, parent};
                     auto pa2 = af_key_t{sample, child};
+                    auto err = af_table.at(pa1) - af_table.at(pa2);
                     return af_table.at(pa1) - af_table.at(pa2) > -epsilon;
                     });
             
@@ -110,8 +114,6 @@ void enumerate_tree(
             nodes.insert(edge.second);
         }
     }
-
-    const float epsilon = 0.05;
 
     if(free_nodes.size() == 0) {
         if(candidate_set.find(current_tree) != candidate_set.end()) return;

@@ -38,8 +38,19 @@ int main(int argc, char** argv) {
 
     parse_vcf(vcf, header, samples, af_clusters, af_table);
 
+    for(auto& c : af_clusters) std::cerr<<"\t"<<c;
+    std::cerr<<std::endl;
+    for(auto& s : samples) {
+        std::cerr<<s;
+        for(auto& c : af_clusters) std::cerr<<"\t"<<af_table[af_key_t(s, c)];
+        std::cerr<<std::endl;
+    }
+    
+
+
     // compute super trees
     auto trees = supertrees(samples, af_clusters, af_table);
+    if(trees.size() == 0) std::cerr<<"[warning] no solution found"<<std::endl;
     
     // reopen vcf file to produce output
     vcf.release();
