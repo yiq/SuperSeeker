@@ -82,13 +82,16 @@ edge_set_t find_viable_moves(
     for(auto parent: af_clusters) {
         for(auto child : af_clusters) {
             if(child == parent) continue;
+            std::cerr<<"Move "<<parent<<" -> "<<child;
             bool feasible = std::all_of(samples.begin(), samples.end(), [&](auto sample) {
                     auto pa1 = af_key_t{sample, parent};
                     auto pa2 = af_key_t{sample, child};
                     auto err = af_table.at(pa1) - af_table.at(pa2);
+                    std::cerr<<"\t"<<sample<<":"<<err;
                     return af_table.at(pa1) - af_table.at(pa2) > -epsilon;
                     });
-            
+            if(feasible) std::cerr<<"\tYES"<<std::endl;
+            else std::cerr<<"\tNO"<<std::endl;
             if(feasible) viable_moves.insert({parent, child});
         }
     }
@@ -126,7 +129,7 @@ void enumerate_tree(
                 if(edge.first == n) children.insert(edge.second);
             }
             for(auto s : samples) {
-                float parent_af = n == "n" ? 0.6 : afs.at({s, n});
+                float parent_af = n == "n" ? 0.5 : afs.at({s, n});
                 float total_children_af = 0.0;
                 for(auto c : children) total_children_af += afs.at({s, c});
                 if(parent_af - total_children_af < -epsilon) return;

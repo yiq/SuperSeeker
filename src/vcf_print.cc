@@ -56,6 +56,7 @@ void vcf_print(YiCppLib::HTSLibpp::htsFile& vcf,
         // per sample trace
         for(auto& sample : samples) {
             auto trace = supertree_trace(tree, sample, af_clusters, af_table);
+            std::for_each(trace.begin(), trace.end(), [](auto &pair){pair.second *= 2;});
             auto trace_str = join(trace.begin(), trace.end());
             trace_strs.push_back(sample+"=\"" + trace_str + "\"");
         }
